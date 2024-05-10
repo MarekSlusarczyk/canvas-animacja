@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            canvas {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border: 2px solid orangered;
+                color: rgb(163, 48, 3);
+                /* color: rgb(54, 77, 24); */
+                color: rgb(190, 171, 0);
+                color: rgb(0, 145, 189);
+            }
+        </style>
+    </head>
+    <body>
+        <canvas width="800" height="500"></canvas>
+
+        <script>
+            const canvas = document.querySelector('canvas');
+            const ctx = canvas.getContext('2d');
+
+            let x = canvas.width / 2;
+            let y = canvas.height / 2;
+            const h = 20;
+            const fps = 20;
+
+            // function animacja() {
+            //     ctx.clearRect(x - h / 2, y - h / 2, h, h);
+            //     x += 2;
+            //     ctx.fillRect(x - h / 2, y - h / 2, h, h);
+            // }
+
+            // setInterval(animacja, 1000 / fps);
+
+            // let lastTime = 0;
+            // function animacja() {
+            //     requestAnimationFrame(animacja);
+            //     // if (time - lastTime >= 1000 / fps) {
+            //     //     lastTime = time;
+            //         ctx.clearRect(x - h / 2, y - h / 2, h, h);
+            //         x += 2;
+            //         ctx.fillRect(x - h / 2, y - h / 2, h, h);
+            //     // }
+            // }
+
+            // animacja();
+            let sunX = 550;
+            let sunY = 70;
+
+            let sunR = 255;
+            let sunG = 255;
+
+            let blueG = 145;
+            let blueB = 189;
+
+            let sunVisible = true;
+
+            let moonX = -20;
+            let moonY = 300;
+
+            let moonSet = false;
+
+            let sandR = 190;
+            let sandG = 171;
+
+            let mountain_1R = 163;
+            let mountain_1G = 48;
+
+            let mountain_2R = 168;
+            let mountain_2G = 81;
+
+            let mountain_3R = 54;
+            let mountain_3G = 77;
+
+            const starsX = [];
+            const starsY = [];
+            for(let i = 0; i <= 30; i++) {
+                starsX.push(getRandomInt(0, 800));
+                starsY.push(getRandomInt(0, 200));
+            }
+
+            function getRandomInt(min, max) {
+                const minCeiled = Math.ceil(min);
+                const maxFloored = Math.floor(max);
+                return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+            }
+
+            function animacja() {
+                requestAnimationFrame(animacja);
+
+
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgb(0, '+blueG+', '+blueB+')';
+                ctx.fillStyle = 'rgb(0, '+blueG+', '+blueB+')';
+                ctx.lineWidth = 20;
+                ctx.moveTo(0, 0);
+                ctx.lineTo(800, 0);
+                ctx.lineTo(800, 300);
+                ctx.lineTo(0, 300);
+                ctx.fill();
+                ctx.closePath();
+                if (blueG > 48) {
+                    blueG -= 0.2;
+                }
+                if (blueB > 59) {
+                    blueB -= 0.2;
+                }
+                    
+                if (sunVisible) {
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgb('+sunR+', '+sunG+', 0)';
+                    ctx.arc(sunX, sunY, 70, 50, 60, false);
+                    ctx.fill();
+                    ctx.closePath();
+                    sunX += 0.2;
+                    sunY += 0.4;
+                    sunG -= 0.5;
+                    if (sunX > 670 && sunY > 300) {
+                        sunVisible = false;
+                    }
+                }
+
+
+                if (!sunVisible) {
+                    for(let i = 0; i <= starsX.length; i++) {
+                        ctx.beginPath();
+                        ctx.fillStyle = '#FFFFCC';
+                        ctx.arc(starsX[i], starsY[i], 1, 50, 60, false);
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgb(255, 255, 255)';
+                    ctx.arc(moonX, moonY, 70, 50, 60, false);
+                    ctx.fill();
+                    ctx.closePath();
+                    moonX += 0.3;
+                    if (moonY < 75) {
+                        moonSet = true;
+                    }
+                    if (moonSet) {
+                        moonY += 0.1;
+                    } else {
+                        moonY -= 0.2;
+                    }
+                    // console.log(moonX)
+                }
+                
+
+                ctx.beginPath();
+                ctx.fillStyle = 'rgb('+mountain_1R+', '+mountain_1G+', 3)';
+                ctx.lineWidth = 20;
+                ctx.moveTo(200, 300);
+                ctx.lineTo(500, 100);
+                ctx.lineTo(700, 300);
+                ctx.fill();
+                ctx.closePath();
+                if (mountain_1R > 130 && mountain_1G > 20) {
+                    mountain_1R -= 0.1;
+                    mountain_1G -= 0.1;
+                }
+
+                ctx.beginPath();
+                ctx.fillStyle = 'rgb('+mountain_3R+', '+mountain_3G+', 24)';
+                ctx.lineWidth = 20;
+                ctx.moveTo(600, 300);
+                ctx.lineTo(750, 80);
+                ctx.lineTo(850, 300);
+                ctx.fill();
+                ctx.closePath();
+                if (mountain_3R > 30 && mountain_3G > 40) {
+                    mountain_3R -= 0.1;
+                    mountain_3G -= 0.1;
+                }
+
+                ctx.beginPath();
+                ctx.fillStyle = 'rgb('+mountain_2R+', '+mountain_2G+', 0)';
+                ctx.lineWidth = 20;
+                ctx.moveTo(-50, 300);
+                ctx.lineTo(150, 130);
+                ctx.lineTo(300, 300);
+                ctx.fill();
+                ctx.closePath();
+                if (mountain_2R > 130 && mountain_2G > 40) {
+                    mountain_2R -= 0.1;
+                    mountain_2G -= 0.1;
+                }
+
+                ctx.beginPath();
+                ctx.fillStyle = 'rgb('+sandR+', '+sandG+', 0)';
+                ctx.lineWidth = 20;
+                ctx.moveTo(0, 300);
+                ctx.lineTo(800, 300);
+                ctx.lineTo(800, 500);
+                ctx.lineTo(0, 500);
+                ctx.fill();
+                ctx.closePath();
+                if (sandR > 130 && sandG > 130) {
+                    sandR -= 0.1;
+                    sandG -= 0.1;
+                }
+            }
+            animacja();
+        </script>
+    </body>
+</html>
